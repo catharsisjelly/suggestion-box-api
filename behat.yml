@@ -1,0 +1,26 @@
+default:
+    extensions:
+        FriendsOfBehat\SymfonyExtension:
+            bootstrap: features/bootstrap/bootstrap.php
+            kernel:
+                environment: test
+                debug: true
+        Behatch\Extension: ~
+        Behat\MinkExtension:
+            sessions:
+                default:
+                    symfony: ~
+
+    suites:
+        default:
+            contexts:
+                - behatch:context:json
+                - behatch:context:rest
+                - behatch:context:debug
+                - Behat\MinkExtension\Context\MinkContext
+                - App\Tests\Behat\BoxContext
+                - App\Tests\Behat\DatabaseContext
+                - App\Tests\Behat\RequestContext
+                - App\Tests\Behat\StorageContext
+                - App\Tests\Behat\SuggestionContext
+                - App\Tests\Behat\SuggestionTypeContext

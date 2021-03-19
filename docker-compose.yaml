@@ -1,0 +1,71 @@
+version: '3'
+
+volumes:
+  db:
+    driver: local
+
+services:
+  db:
+    image: mariadb:10.5
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 'dev'
+      MYSQL_USER: suggestion-box
+      MYSQL_PASSWORD: 'dev'
+      MYSQL_DATABASE: suggestion-box-api
+    volumes:
+      - db:/var/lib/mysql
+    ports:
+      - 3030:3306
+
+  db_test:
+    image: mariadb:10.5
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 'test'
+      MYSQL_USER: suggestion-box
+      MYSQL_PASSWORD: 'test'
+      MYSQL_DATABASE: suggestion-box-test
+    volumes:
+      - db:/var/lib/mysql-test
+    ports:
+      - 3031:3306
+
+  nginx:
+    build:
+      context: ./docker/nginx
+    image: catharsisjelly/nginx:stable
+    restart: always
+    ports:
+      - 4430:443
+    volumes:
+      - ./:/var/www/html
+    depends_on:
+      - php
+      - db
+      - db_test
+
+  php:
+    environment:
+      XDEBUG_CONFIG: "idekey=PHPSTORM"
+    build:
+      context: ./docker/php
+    image: catharsisjelly/php:7.4-fpm
+    restart: always
+    volumes:
+      - ./:/var/www/html
+    depends_on:
+      - db
+      - db_test
+
+  node:
+    image: node:15-alpine
+    volumes:
+      - ./:/app
+    working_dir: /app
+
+  composer:
+    image: composer:latest
+    volumes:
+      - ./:/app
+
