@@ -20,7 +20,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\HasLifecycleCallbacks()
  * @ApiResource(
  *     collectionOperations={
- *          "get",
+ *         "get",
  *         "post"
  *     },
  *     itemOperations={

@@ -5,7 +5,6 @@ namespace App\Tests\Behat;
 use App\Entity\Box;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
-use Behatch\Context\RestContext;
 use Doctrine\ORM\EntityManagerInterface;
 use Faker\Factory;
 use Faker\Generator;
@@ -43,6 +42,7 @@ class BoxContext implements Context
     {
         $box = new Box();
         $box->setName($this->faker->word);
+        $box->setIsOpen(true);
         $this->entityManager->persist($box);
         $this->entityManager->flush();
 

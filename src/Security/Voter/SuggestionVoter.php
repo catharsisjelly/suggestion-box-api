@@ -5,16 +5,15 @@ namespace App\Security\Voter;
 use App\Entity\Suggestion;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class SuggestionVoter extends Voter
 {
-    const SUGGESTION_POST = 'SUGGESTION_POST';
+    const SUGGESTION_CREATE = 'SUGGESTION_CREATE';
     const SUGGESTION_UPDATE = 'SUGGESTION_UPDATE';
 
     protected function supports($attribute, $subject)
     {
-        return in_array($attribute, [self::SUGGESTION_POST, self::SUGGESTION_UPDATE])
+        return in_array($attribute, [self::SUGGESTION_CREATE, self::SUGGESTION_UPDATE])
             && $subject instanceof Suggestion;
     }
 
@@ -23,6 +22,10 @@ class SuggestionVoter extends Voter
         /** @var Suggestion $suggestion */
         $suggestion = $subject;
         $box = $suggestion->getBox();
+
+        if (!$box->isOpen()) {
+            return false;
+        }
 
         // Does this box have no startDatetime and no endDatetime
         if ($box->getStartDatetime() === null && $box->getEndDatetime() === null) {

@@ -14,12 +14,12 @@ use Symfony\Bridge\Doctrine\IdGenerator\UlidGenerator;
  * @ORM\Entity(repositoryClass=SuggestionRepository::class)
  * @ApiResource(
  *     collectionOperations={
- *          "get",
- *         "post"
+ *         "get",
+ *         "post" = { "security_post_denormalize" = "is_granted('SUGGESTION_CREATE', object)", "security_message"="Suggestion Box is not be open" }
  *     },
  *     itemOperations={
  *         "get",
- *         "patch",
+ *         "patch" = { "security" = "is_granted('SUGGESTION_UPDATE', object)", "security_message"="Suggestion Box is not be open" },
  *         "delete"
  *     }
  * )

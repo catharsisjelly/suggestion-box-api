@@ -17,10 +17,11 @@ This todo is in no particular order
 * Fix Github actions to run behat & PHPUnit tests
 * Add in postman calls
 * Add in more Behat tests
+  * List tests
+  * Box being open/closed/timeboxed to suggestions
 * Add in some sort of login or thing that only allows the person who started the box to edit the box
 * Add in voting for suggestions
 * Add in moderation for suggestions
-* Add in a check so that suggestions can onl happen between the `startDatetime` and `endDatetime`
 
 ## Development setup
 
