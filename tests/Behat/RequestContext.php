@@ -47,6 +47,7 @@ class RequestContext implements Context
     {
         $url = $this->urlGenerator->generate($route);
         $body = $this->replaceVars($body);
+        $body = $this->replaceDates($body);
         $this->restContext->iSendARequestToWithBody(
             $method,
             $url,
@@ -66,15 +67,17 @@ class RequestContext implements Context
     }
 
     /**
-     * @When I send a :method request to :route with the route parameters and body:
-     * @param string $method
-     * @param string $route
-     * @param PyStringNode $body
+     * @When I send a :method request to :route containing dates with the following details:
      */
-    public function iSendARequestToWithTheRouteParametersAndBody(string $method, string $route, PyStringNode $body)
+    public function iSendARequestToContainingDatesWithTheFollowingDetails(string $method, string $route, PyStringNode $body)
     {
-        $url = $this->urlGenerator->generate($route, $this->routeParameters);
-        $this->restContext->iSendARequestToWithBody($method, $url, $body);
+        $url = $this->urlGenerator->generate($route);
+        $body = $this->replaceVars($body);
+        $this->restContext->iSendARequestToWithBody(
+            $method,
+            $url,
+            $body
+        );
     }
 
     /**
@@ -84,6 +87,16 @@ class RequestContext implements Context
     {
         $url = $this->urlGenerator->generate($route, $this->routeParameters);
         $this->restContext->iSendARequestTo($method, $url);
+    }
+
+    /**
+     * @When I send a :method request to :route with the route parameters and body:
+     */
+    public function iSendARequestToWithTheRouteParametersAndBody(string $method, string $route, PyStringNode $body)
+    {
+        $url = $this->urlGenerator->generate($route, $this->routeParameters);
+        $body = $this->replaceDates($body);
+        $this->restContext->iSendARequestToWithBody($method, $url, $body);
     }
 
     /**
@@ -121,6 +134,18 @@ class RequestContext implements Context
         if ($result === null) {
             return $body;
         }
+        return new PyStringNode([$result], 1);
+    }
+
+    private function replaceDates(PyStringNode $body): PyStringNode
+    {
+        $result = preg_replace_callback(
+            '/\[\[(.*)\]\]/',
+            function ($matches) {
+                return (new \DateTimeImmutable($matches[1]))->format('c');
+            },
+            $body->getRaw()
+        );
         return new PyStringNode([$result], 1);
     }
 }

@@ -56,12 +56,14 @@ class Box
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @ApiProperty(iri="http://schema.org/startTime")
+     * @Assert\LessThan(propertyPath="endDatetime")
      */
     private ?\DateTimeInterface $startDatetime;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @ApiProperty(iri="http://schema.org/endTime")
+     * @Assert\GreaterThan(propertyPath="startDatetime")
      */
     private ?\DateTimeInterface $endDatetime;
 

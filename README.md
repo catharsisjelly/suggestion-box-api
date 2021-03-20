@@ -10,18 +10,7 @@ This is built using PHP and API Platform, please feel free to add code to it i=t
 docker container that you can use to run a local development. If you have any problems/questions with this then please
 file an issue and or a pull request making the relevant changes.
 
-## Todo
-
-This todo is in no particular order
-
-* Fix Github actions to run behat & PHPUnit tests
-* Add in postman calls
-* Add in more Behat tests
-  * List tests
-  * Box being open/closed/timeboxed to suggestions
-* Add in some sort of login or thing that only allows the person who started the box to edit the box
-* Add in voting for suggestions
-* Add in moderation for suggestions
+For a list of tasks see the [Github Issue list](https://github.com/catharsisjelly/suggestion-box-api/issues) 
 
 ## Development setup
 

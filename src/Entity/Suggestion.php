@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Uid\Ulid;
 use Symfony\Bridge\Doctrine\IdGenerator\UlidGenerator;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=SuggestionRepository::class)
@@ -49,6 +50,8 @@ class Suggestion
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
      */
     private string $value;
 

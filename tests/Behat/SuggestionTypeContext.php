@@ -5,8 +5,6 @@ namespace App\Tests\Behat;
 use App\Entity\SuggestionType;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
-use Behat\Behat\Tester\Exception\PendingException;
-use Behat\Gherkin\Node\PyStringNode;
 use Doctrine\ORM\EntityManagerInterface;
 use Faker\Factory;
 use Faker\Generator;
