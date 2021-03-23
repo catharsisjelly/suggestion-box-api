@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use App\Repository\SuggestionRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -24,6 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         "delete"
  *     }
  * )
+ * @ApiFilter(OrderFilter::class, properties={"created"})
  */
 class Suggestion
 {
