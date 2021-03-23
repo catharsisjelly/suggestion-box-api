@@ -82,6 +82,7 @@
     },
     "require-dev": {
         "behatch/contexts": "^3.3",
+        "doctrine/doctrine-fixtures-bundle": "^3.4",
         "friends-of-behat/mink-browserkit-driver": "^1.5",
         "friends-of-behat/symfony-extension": "^2.2",
         "mockery/mockery": "^1.4",
