@@ -17,6 +17,7 @@ class SuggestionFixtures extends Fixture implements DependentFixtureInterface
             $suggestion = new Suggestion();
             $suggestion->setBox($this->getReference('box'));
             $suggestion->setSuggestionType($this->getReference('suggestion-type'));
+            $suggestion->setDiscarded($this->getFaker()->boolean);
             $suggestion->setValue($this->getFaker()->word);
             $suggestion->setCreated($this->getFaker()->dateTime);
             $suggestion->setUpdated($this->getFaker()->dateTime);

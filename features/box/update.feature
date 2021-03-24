@@ -1,13 +1,16 @@
 @update
 Feature: Update Suggestion Box
 
-  Scenario: Update a Suggestion Box
-    Given there is already a Box
+  Background:
+    Given I create a "Box"
+    And I store the last created object as "box"
     And I set the route parameters to
-      | name | value  |
-      | id   | box-id |
+      | name | value      |
+      | id   | {{box.id}} |
     And I add "Content-Type" header equal to "application/merge-patch+json"
-    When I send a "PATCH" request to "api_boxes_patch_item" with the route parameters and body:
+
+  Scenario: Update a Suggestion Box
+    When I send a "PATCH" request to the "api_boxes_patch_item" route with the route parameters and body:
       """
       {
         "name": "Updated Name"
@@ -20,12 +23,7 @@ Feature: Update Suggestion Box
       | name | Updated Name |
 
   Scenario: Create a new Suggestion Box with an empty name
-    Given there is already a Box
-    And I set the route parameters to
-      | name | value  |
-      | id   | box-id |
-    And I add "Content-Type" header equal to "application/merge-patch+json"
-    When I send a "PATCH" request to "api_boxes_patch_item" with the route parameters and body:
+    When I send a "PATCH" request to the "api_boxes_patch_item" route with the route parameters and body:
       """
       {
         "name": ""
@@ -36,12 +34,7 @@ Feature: Update Suggestion Box
     And the JSON node "violations" should have 1 elements
 
   Scenario: Update a Suggestion Box with a bad time
-    Given there is already a Box
-    And I set the route parameters to
-      | name | value  |
-      | id   | box-id |
-    And I add "Content-Type" header equal to "application/merge-patch+json"
-    When I send a "PATCH" request to "api_boxes_patch_item" with the route parameters and body:
+    When I send a "PATCH" request to the "api_boxes_patch_item" route with the route parameters and body:
       """
       {
         "name": "Updated Name",
@@ -54,12 +47,7 @@ Feature: Update Suggestion Box
     And the JSON node "violations" should have 2 elements
 
   Scenario: Update a Suggestion Box with a good time
-    Given there is already a Box
-    And I set the route parameters to
-      | name | value  |
-      | id   | box-id |
-    And I add "Content-Type" header equal to "application/merge-patch+json"
-    When I send a "PATCH" request to "api_boxes_patch_item" with the route parameters and body:
+    When I send a "PATCH" request to the "api_boxes_patch_item" route with the route parameters and body:
       """
       {
         "name": "Updated with good timeboxed test",

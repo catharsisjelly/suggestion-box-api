@@ -6,6 +6,8 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\SuggestionRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -15,18 +17,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=SuggestionRepository::class)
- * @ApiResource(
- *     collectionOperations={
- *         "get",
- *         "post" = { "security_post_denormalize" = "is_granted('SUGGESTION_CREATE', object)", "security_message"="Suggestion Box is not be open" }
- *     },
- *     itemOperations={
- *         "get",
- *         "patch" = { "security" = "is_granted('SUGGESTION_UPDATE', object)", "security_message"="Suggestion Box is not be open" },
- *         "delete"
- *     }
- * )
+ * @see config/api_platform/resources.yaml
  * @ApiFilter(OrderFilter::class, properties={"created"})
+ * @ApiFilter(BooleanFilter::class, properties={"discarded"})
+ * @ApiFilter(SearchFilter::class, properties={"box.id": "exact", "suggestionType.id": "exact"})
  */
 class Suggestion
 {
@@ -59,18 +53,22 @@ class Suggestion
     private string $value;
 
     /**
+     * @ORM\Column(type="boolean", options={"default": 0})
+     */
+    private bool $discarded = false;
+
+    /**
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      * @ApiProperty(writable=false)
      */
     private \DateTimeInterface $created;
 
-    /**
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime")
-     * @ApiProperty(writable=false)
-     */
-    private \DateTimeInterface $updated;
+    public function __construct()
+    {
+        $this->id = new Ulid();
+        $this->created = new \DateTimeImmutable();
+    }
 
     public function getId(): ?Ulid
     {
@@ -113,6 +111,17 @@ class Suggestion
         return $this;
     }
 
+    public function isDiscarded(): bool
+    {
+        return $this->discarded;
+    }
+
+    public function setDiscarded(bool $discarded): self
+    {
+        $this->discarded = $discarded;
+        return $this;
+    }
+
     public function getCreated(): ?\DateTimeInterface
     {
         return $this->created;
@@ -121,18 +130,6 @@ class Suggestion
     public function setCreated(\DateTimeInterface $created): self
     {
         $this->created = $created;
-
-        return $this;
-    }
-
-    public function getUpdated(): ?\DateTimeInterface
-    {
-        return $this->updated;
-    }
-
-    public function setUpdated(\DateTimeInterface $updated): self
-    {
-        $this->updated = $updated;
 
         return $this;
     }

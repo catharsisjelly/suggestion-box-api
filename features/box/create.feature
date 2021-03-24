@@ -3,9 +3,10 @@ Feature: Create Suggestion Box
   In order to create a Box to hold Suggestions
   I must send a request with the correct body to create a Box
 
+  @this
   Scenario: Create a new Suggestion Box
     Given I add "Content-Type" header equal to "application/ld+json"
-    When I send a "POST" request to "api_boxes_post_collection" with the following details:
+    When I send a "POST" request to the "api_boxes_post_collection" route with the following details:
       """
       {
         "name": "Creation Test"
@@ -19,7 +20,7 @@ Feature: Create Suggestion Box
 
   Scenario: Create a new Suggestion Box with an empty name
     Given I add "Content-Type" header equal to "application/ld+json"
-    When I send a "POST" request to "api_boxes_post_collection" with the following details:
+    When I send a "POST" request to the "api_boxes_post_collection" route with the following details:
       """
       {
         "name": ""
@@ -31,7 +32,7 @@ Feature: Create Suggestion Box
 
   Scenario: Create a new Suggestion Box with a bad startDateTime & endDateTime
     Given I add "Content-Type" header equal to "application/ld+json"
-    When I send a "POST" request to "api_boxes_post_collection" with the following details:
+    When I send a "POST" request to the "api_boxes_post_collection" route with the following details:
       """
       {
         "name": "Bad start and end time test",
@@ -45,7 +46,7 @@ Feature: Create Suggestion Box
 
   Scenario: Create a new Suggestion Box with a correct startDateTime & endDateTime
     Given I add "Content-Type" header equal to "application/ld+json"
-    When I send a "POST" request to "api_boxes_post_collection" with the following details:
+    When I send a "POST" request to the "api_boxes_post_collection" route with the following details:
       """
       {
         "name": "Good timeboxed box test",
