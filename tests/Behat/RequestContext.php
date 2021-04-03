@@ -8,6 +8,7 @@ use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
 use Behatch\Asserter;
+use Behatch\Context\JsonContext;
 use Behatch\Context\RestContext;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -103,16 +104,6 @@ class RequestContext implements Context
         }
     }
 
-    private function getArrayFromResponse(): array
-    {
-        $content = $this->restContext->getSession()->getPage()->getContent();
-        $response = json_decode($content, true);
-        if ($response === null) {
-            throw new \Exception('Failed to decode JSON ' . json_last_error_msg());
-        }
-        return $response;
-    }
-
     /**
      * @When I send a :method request to the :route route with the following details:
      * @param string $method
@@ -151,5 +142,26 @@ class RequestContext implements Context
         $this->restContext->iSendARequestToWithBody($method, $url, $body);
     }
 
+    /**
+     * @Given the JSON nodes should contain :numberOfViolations violation
+     * @Given the JSON nodes should contain :numberOfViolations violations
+     * @param int $numberOfViolations
+     */
+    public function theJSONNodesShouldContainViolation(int $numberOfViolations)
+    {
+        $response = $this->getArrayFromResponse();
+        $violationKey = 'violations';
+        $this->assertArrayHasKey($violationKey, $response);
+        $this->assertCount($numberOfViolations, $response[$violationKey]);
+    }
 
+    private function getArrayFromResponse(): array
+    {
+        $content = $this->restContext->getSession()->getPage()->getContent();
+        $response = \json_decode($content, true);
+        if ($response === null) {
+            throw new \Exception('Failed to decode JSON ' . json_last_error_msg());
+        }
+        return $response;
+    }
 }

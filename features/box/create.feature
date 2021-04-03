@@ -3,7 +3,6 @@ Feature: Create Suggestion Box
   In order to create a Box to hold Suggestions
   I must send a request with the correct body to create a Box
 
-  @this
   Scenario: Create a new Suggestion Box
     Given I add "Content-Type" header equal to "application/ld+json"
     When I send a "POST" request to the "api_boxes_post_collection" route with the following details:

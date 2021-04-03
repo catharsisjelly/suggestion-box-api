@@ -3,8 +3,8 @@ resources:
     collectionOperations:
       get: ~
       post:
-        security_post_denormalize: "is_granted('SUGGESTION_CREATE', object)"
-        security_message: Suggestion Box is not be open
+        validation_groups:
+          - post
     itemOperations:
       get: ~
       patch:

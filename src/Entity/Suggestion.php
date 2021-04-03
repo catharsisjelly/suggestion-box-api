@@ -4,11 +4,11 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiProperty;
-use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\SuggestionRepository;
+use App\Validator\SuggestionBox;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Uid\Ulid;
@@ -21,6 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ApiFilter(OrderFilter::class, properties={"created"})
  * @ApiFilter(BooleanFilter::class, properties={"discarded"})
  * @ApiFilter(SearchFilter::class, properties={"box.id": "exact", "suggestionType.id": "exact"})
+ * @SuggestionBox(groups={"post"})
  */
 class Suggestion
 {
