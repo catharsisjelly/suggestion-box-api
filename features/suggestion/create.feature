@@ -2,15 +2,19 @@
 Feature: Suggestions
 
   Scenario: Create a new Suggestion
-    Given there is already a Box
-    And the Box has a Suggestion Type
+    Given I create a "Box"
+    And I store the last created object as "box"
+    And I create a "SuggestionType" with the following data:
+      | property | value   |
+      | box      | {{box}} |
+    And I store the last created object as "suggestion-type"
     And I add "Content-Type" header equal to "application/ld+json"
-    When I send a "POST" request to "api_suggestions_post_collection" with the following details:
+    When I send a "POST" request to the "api_suggestions_post_collection" route with the following details:
       """
       {
         "value": "Location",
-        "box": "{{box-iri}}",
-        "suggestionType": "{{suggestion-type-iri}}"
+        "box": "/api/boxes/{{box.id}}",
+        "suggestionType": "/api/suggestion_types/{{suggestion-type.id}}"
       }
       """
     Then the response status code should be 201

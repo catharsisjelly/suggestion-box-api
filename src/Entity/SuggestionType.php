@@ -46,6 +46,7 @@ class SuggestionType
 
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
+     * @ApiProperty(iri="http://schema.org/name", required=true)
      * @Assert\NotBlank()
      * @Assert\NotNull()
      */

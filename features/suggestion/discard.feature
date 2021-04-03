@@ -1,7 +1,10 @@
-@read
-Feature: Suggestion
+@update
+Feature: Suggestion update
+  Suggestions cannot be updated once they are submitted
+  As an API User
+  I can only discard a submitted Suggestion
 
-  Scenario: Read a new Suggestion
+  Scenario: Discard a Suggestion
     Given I create a "Box"
     And I store the last created object as "box"
     And I create a "SuggestionType" with the following data:
@@ -17,9 +20,17 @@ Feature: Suggestion
     And I set the route parameters to
       | name | value             |
       | id   | {{suggestion.id}} |
-    When I send a "GET" request to the "api_suggestions_patch_item" route with the route parameters
+    And I add "Content-Type" header equal to "application/merge-patch+json"
+    When I send a "PATCH" request to the "api_suggestions_patch_item" route with the route parameters and body:
+      """
+      {
+        "value": "changed",
+        "discarded": true
+      }
+      """
     Then the response status code should be 200
     And the response should be in JSON
     And the JSON node "@id" should not be null
     And the JSON nodes should be equal to:
-      | value | Pineapple |
+      | value     | Pineapple |
+      | discarded | true      |

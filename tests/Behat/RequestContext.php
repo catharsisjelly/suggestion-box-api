@@ -18,6 +18,7 @@ class RequestContext implements Context
     private UrlGeneratorInterface $urlGenerator;
     private RestContext $restContext;
     private StorageContext $storageContext;
+    private DateContext $dateContext;
     private array $routeParameters;
 
     public function __construct(UrlGeneratorInterface $urlGenerator)
@@ -35,24 +36,7 @@ class RequestContext implements Context
         $environment = $scope->getEnvironment();
         $this->restContext = $environment->getContext(RestContext::class);
         $this->storageContext = $environment->getContext(StorageContext::class);
-    }
-
-    /**
-     * @Given I send a :method request to :route with the following details:
-     * @param string $method
-     * @param string $route
-     * @param PyStringNode $body
-     */
-    public function iSendARequestToWithTheFollowingDetails(string $method, string $route, PyStringNode $body)
-    {
-        $url = $this->urlGenerator->generate($route);
-        $body = $this->replaceVars($body);
-        $body = $this->replaceDates($body);
-        $this->restContext->iSendARequestToWithBody(
-            $method,
-            $url,
-            $body
-        );
+        $this->dateContext = $environment->getContext(DateContext::class);
     }
 
     /**
@@ -62,50 +46,61 @@ class RequestContext implements Context
     public function iSetTheRouteParametersTo(TableNode $table)
     {
         foreach ($table->getColumnsHash() as $row) {
-            $this->routeParameters[$row['name']] = $this->storageContext->retrieve($row['value']);
+            $value = $this->storageContext->retrieve($row['value']);
+            $this->routeParameters[$row['name']] = $value;
         }
     }
 
     /**
-     * @When I send a :method request to :route containing dates with the following details:
+     * @When I send a :method request to the :route route with parameters
+     * @param string $method
+     * @param string $route
+     * @param TableNode $table
      */
-    public function iSendARequestToContainingDatesWithTheFollowingDetails(string $method, string $route, PyStringNode $body)
+    public function iSendARequestToTheRouteWithParameters(string $method, string $route, TableNode $table)
     {
+        // Convert any row parameter that has storage items
         $url = $this->urlGenerator->generate($route);
-        $body = $this->replaceVars($body);
-        $this->restContext->iSendARequestToWithBody(
-            $method,
-            $url,
-            $body
-        );
+        $this->restContext->iSendARequestToWithParameters($method, $url, $this->storageContext->retrieve($table));
     }
 
     /**
-     * @When I send a :method request to :route with the route parameters
+     * @When I send a :method request to the :route route
+     * @param string $method
+     * @param string $route
      */
-    public function iSendARequestToWithTheParameters(string $method, string $route)
+    public function iSendARequestToTheRoute(string $method, string $route)
     {
-        $url = $this->urlGenerator->generate($route, $this->routeParameters);
+        $url = $this->urlGenerator->generate($route);
         $this->restContext->iSendARequestTo($method, $url);
     }
 
     /**
-     * @When I send a :method request to :route with the route parameters and body:
+     * @Given the JSON response should have :numberOfItems total items
+     * @param int $numberOfItems
+     * @throws \Exception
      */
-    public function iSendARequestToWithTheRouteParametersAndBody(string $method, string $route, PyStringNode $body)
+    public function theJSONResponseShouldHaveTotalItems(int $numberOfItems)
     {
-        $url = $this->urlGenerator->generate($route, $this->routeParameters);
-        $body = $this->replaceDates($body);
-        $this->restContext->iSendARequestToWithBody($method, $url, $body);
+        $response = $this->getArrayFromResponse();
+        $this->assertEquals($numberOfItems, $response['hydra:totalItems']);
     }
 
     /**
-     * @Given the JSON response should have :numberOfMembers members
+     * @Given the member :memberCount should have the following data
+     * @param int $memberCount
+     * @param TableNode $table
      */
-    public function theJSONResponseShouldHaveMembers(int $numberOfMembers)
+    public function theMemberShouldHaveTheFollowingData(int $memberCount, TableNode $table)
     {
         $response = $this->getArrayFromResponse();
-        $this->assertCount($numberOfMembers, $response['hydra:member']);
+        $member = $response['hydra:member'][$memberCount - 1] ?? null;
+        if ($member === null) {
+            throw new \Exception('I broke!');
+        }
+        foreach ($table->getColumnsHash() as $row) {
+            $this->assertEquals($row['value'], $member[$row['key']]);
+        }
     }
 
     private function getArrayFromResponse(): array
@@ -119,33 +114,42 @@ class RequestContext implements Context
     }
 
     /**
+     * @When I send a :method request to the :route route with the following details:
+     * @param string $method
+     * @param string $route
      * @param PyStringNode $body
-     * @return PyStringNode
      */
-    private function replaceVars(PyStringNode $body): PyStringNode
+    public function iSendARequestToTheRouteWithTheFollowingDetails(string $method, string $route, PyStringNode $body)
     {
-        $result = preg_replace_callback(
-            '/\{\{(.*)\}\}/',
-            function ($matches) {
-                return $this->storageContext->retrieve($matches[1]);
-            },
-            $body->getRaw()
-        );
-        if ($result === null) {
-            return $body;
-        }
-        return new PyStringNode([$result], 1);
+        $body = $this->dateContext->replaceDates($body);
+        $body = $this->storageContext->retrieve($body);
+        $url = $this->urlGenerator->generate($route);
+        $this->restContext->iSendARequestToWithBody($method, $url, $body);
     }
 
-    private function replaceDates(PyStringNode $body): PyStringNode
+    /**
+     * @When I send a :method request to the :route route with the route parameters
+     * @param string $method
+     * @param string $route
+     */
+    public function iSendARequestToTheRouteWithTheRouteParameters(string $method, string $route)
     {
-        $result = preg_replace_callback(
-            '/\[\[(.*)\]\]/',
-            function ($matches) {
-                return (new \DateTimeImmutable($matches[1]))->format('c');
-            },
-            $body->getRaw()
-        );
-        return new PyStringNode([$result], 1);
+        $url = $this->urlGenerator->generate($route, $this->routeParameters);
+        $this->restContext->iSendARequestTo($method, $url);
     }
+
+    /**
+     * @When I send a :method request to the :route route with the route parameters and body:
+     * @param string $method
+     * @param string $route
+     * @param PyStringNode $body
+     */
+    public function iSendARequestToTheRouteWithTheRouteParametersAndBody(string $method, string $route, PyStringNode $body)
+    {
+        $body = $this->dateContext->replaceDates($body);
+        $url = $this->urlGenerator->generate($route, $this->routeParameters);
+        $this->restContext->iSendARequestToWithBody($method, $url, $body);
+    }
+
+
 }

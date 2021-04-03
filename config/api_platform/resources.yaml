@@ -1,0 +1,20 @@
+resources:
+  App\Entity\Suggestion:
+    collectionOperations:
+      get: ~
+      post:
+        security_post_denormalize: "is_granted('SUGGESTION_CREATE', object)"
+        security_message: Suggestion Box is not be open
+    itemOperations:
+      get: ~
+      patch:
+        openapi_context:
+          summary: Mark a suggestion as discarded or not
+          description: Set a Suggestion to be discarded so they can be filtered out
+          requestBody:
+            content:
+              application/merge-patch+json:
+                schema:
+                  type: object
+                  properties:
+                    discarded: { type: boolean }

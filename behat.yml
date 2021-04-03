@@ -18,8 +18,9 @@ default:
                 - behatch:context:rest
                 - behatch:context:debug
                 - Behat\MinkExtension\Context\MinkContext
-                - App\Tests\Behat\BoxContext
                 - App\Tests\Behat\DatabaseContext
+                - App\Tests\Behat\DateContext
+                - App\Tests\Behat\ObjectContext
                 - App\Tests\Behat\RequestContext
                 - App\Tests\Behat\StorageContext
                 - App\Tests\Behat\SuggestionContext
