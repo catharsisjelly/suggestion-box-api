@@ -28,7 +28,7 @@ class SuggestionBoxValidatorTest extends ConstraintValidatorTestCase
      * @param array $violations
      * @throws \Exception
      */
-    public function test_is_open_false(
+    public function test_suggesstion_box_validation(
         bool $isOpen,
         ?string $startDatetime,
         ?string $endDateTime,
