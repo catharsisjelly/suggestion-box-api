@@ -65,6 +65,7 @@
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('id');",
 									"    pm.environment.set('box-id', jsonData.id);",
+									"    pm.environment.set('box-iri', jsonData['@id']);",
 									"});"
 								],
 								"type": "text/javascript"
@@ -176,7 +177,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"My Box Updated\",\n    \"startDatetime\": null,\n    \"isOpen\": true,\n    \"isPublic\": false\n}",
+							"raw": "{\n    \"name\": \"My Box Updated\",\n    \"isOpen\": true,\n    \"isPublic\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -254,6 +255,7 @@
 									"    pm.expect(responseData).to.have.property('hydra:member');",
 									"    if (responseData['hydra:member'].length > 0) {",
 									"       pm.environment.set('suggestion-type-id', responseData['hydra:member'][0]['id']);",
+									"       pm.environment.set('suggestion-type-iri', responseData['hydra:member'][0]['@id']);",
 									"    }",
 									"});"
 								],
@@ -294,6 +296,7 @@
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('id');",
 									"    pm.environment.set('suggestion-type-id', jsonData.id);",
+									"    pm.environment.set('suggestion-type-iri', jsonData['@id']);",
 									"});"
 								],
 								"type": "text/javascript"
@@ -505,6 +508,23 @@
 							"path": [
 								"api",
 								"suggestions"
+							],
+							"query": [
+								{
+									"key": "order[created]",
+									"value": "asc",
+									"disabled": true
+								},
+								{
+									"key": "discarded",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "box",
+									"value": "01F1J2DTAGKXP55XA9495D36JV",
+									"disabled": true
+								}
 							]
 						}
 					},
@@ -622,11 +642,6 @@
 							}
 						}
 					],
-					"protocolProfileBehavior": {
-						"disabledSystemHeaders": {
-							"content-type": true
-						}
-					},
 					"request": {
 						"method": "PATCH",
 						"header": [
@@ -638,47 +653,13 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"value\": \"New Value\",\n    \"box\": \"{{box-iri}}\",\n    \"suggestionType\": \"{{suggestion-type-iri}}\"\n}",
+							"raw": "{\n    \"discarded\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": {
-							"raw": "{{scheme}}://{{host}}:{{port}}/api/suggestions/{{suggestion-id}}",
-							"protocol": "{{scheme}}",
-							"host": [
-								"{{host}}"
-							],
-							"port": "{{port}}",
-							"path": [
-								"api",
-								"suggestions",
-								"{{suggestion-id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test('Response is 204', function() {",
-									"    pm.response.to.have.status(204);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [],
 						"url": {
 							"raw": "{{scheme}}://{{host}}:{{port}}/api/suggestions/{{suggestion-id}}",
 							"protocol": "{{scheme}}",

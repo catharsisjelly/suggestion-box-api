@@ -13,7 +13,9 @@ class BoxFactory
 
         $box = new Box();
         $box->setName($data['name'] ?? $faker->word);
-        $box->setIsOpen($data['isOpen'] ?? true);
+        $box->setIsOpen(isset($data['isOpen']) ? (bool) $data['isOpen'] : true);
+        $box->setStartDatetime($data['startDatetime'] ? new \DateTimeImmutable($data['startDatetime']) : null);
+        $box->setEndDatetime($data['endDatetime'] ? new \DateTimeImmutable($data['endDatetime']) : null);
         return $box;
     }
 }

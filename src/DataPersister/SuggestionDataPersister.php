@@ -9,9 +9,6 @@ use Doctrine\ORM\EntityManagerInterface;
 class SuggestionDataPersister implements ContextAwareDataPersisterInterface
 {
     private EntityManagerInterface $entityManager;
-    /**
-     * @var ContextAwareDataPersisterInterface
-     */
     private ContextAwareDataPersisterInterface $decorated;
 
     /**
@@ -20,8 +17,8 @@ class SuggestionDataPersister implements ContextAwareDataPersisterInterface
      */
     public function __construct(ContextAwareDataPersisterInterface $decorated, EntityManagerInterface $entityManager)
     {
-        $this->entityManager = $entityManager;
         $this->decorated = $decorated;
+        $this->entityManager = $entityManager;
     }
 
     public function supports($data, array $context = []): bool
