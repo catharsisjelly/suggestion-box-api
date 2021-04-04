@@ -10,18 +10,27 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\SuggestionRepository;
 use App\Validator\SuggestionBox;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Uid\Ulid;
 use Symfony\Bridge\Doctrine\IdGenerator\UlidGenerator;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=SuggestionRepository::class)
+ * @ORM\Table(uniqueConstraints={
+ *     @UniqueConstraint(columns={"value", "box_id", "suggestion_type_id"})
+ * })
  * @see config/api_platform/resources.yaml
  * @ApiFilter(OrderFilter::class, properties={"created"})
  * @ApiFilter(BooleanFilter::class, properties={"discarded"})
  * @ApiFilter(SearchFilter::class, properties={"box.id": "exact", "suggestionType.id": "exact"})
  * @SuggestionBox(groups={"post"})
+ * @UniqueEntity(
+ *     fields={"value", "box", "suggestionType"},
+ *     groups={"post"}
+ * )
  */
 class Suggestion
 {

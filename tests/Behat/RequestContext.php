@@ -4,11 +4,9 @@ namespace App\Tests\Behat;
 
 use Behat\Behat\Context\Context;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
-use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
 use Behatch\Asserter;
-use Behatch\Context\JsonContext;
 use Behatch\Context\RestContext;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
