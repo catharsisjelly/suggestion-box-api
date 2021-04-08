@@ -6,6 +6,8 @@ and mobile app. The results could also be streamed live to an audience.
 
 ## Build information
 
+Ensure that you have [PHP composer](https://getcomposer.org/) (v2) installed
+
 This is built using PHP and API Platform, please feel free to add code to it i=to make it better overall. There is a
 docker container that you can use to run a local development. If you have any problems/questions with this then please
 file an issue and or a pull request making the relevant changes.
@@ -23,6 +25,7 @@ the supplied DB test container
 You can then run the following to set up your DB
 
 ```bash
+composer install
 docker-compose up -d
 docker-compose exec php sh -c "bin/console doctrine:migrations:migrate -n"
 docker-compose exec php sh -c "bin/console doctrine:migrations:migrate -e test -n"
