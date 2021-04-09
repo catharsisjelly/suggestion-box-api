@@ -1,5 +1,5 @@
 @list
-Feature: Suggestion List
+Feature: List all Suggestions
   As a user of the API
   I want to be able to list and filter all the suggestions
 
@@ -28,7 +28,7 @@ Feature: Suggestion List
       | property       | value               |
       | box            | {{box}}             |
       | suggestionType | {{suggestion-type}} |
-      | value          | Pineapple           |
+      | value          | Pineapple2           |
     When I send a "GET" request to the "api_suggestions_get_collection" route with parameters
       | key            | value |
       | order[created] | desc  |

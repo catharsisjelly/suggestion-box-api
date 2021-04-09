@@ -1,5 +1,8 @@
 @create
-Feature: Suggestion Types
+Feature: Create a Suggestion Type
+  In order to create a Suggestion Type for a Box
+  As a Creator
+  I send a request with the correct body to create a Suggestion Type
 
   Scenario: Create a new Suggestion Box
     Given I create a "Box"

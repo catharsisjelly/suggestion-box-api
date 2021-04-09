@@ -1,5 +1,7 @@
 @read
-Feature: Suggestion
+Feature: Read a Suggestion
+  As a user of the API
+  I want to be able to read the state of any suggestion
 
   Scenario: Read a new Suggestion
     Given I create a "Box"

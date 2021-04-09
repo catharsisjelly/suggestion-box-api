@@ -1,5 +1,8 @@
 @delete
 Feature: Box
+  As a Creator
+  I can delete previously created Boxes
+  It also deletes associated Suggestion Types and Suggestions
 
   Scenario: Delete a Suggestion Box
     Given I create a "Box"

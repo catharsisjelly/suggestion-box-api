@@ -1,5 +1,7 @@
 @read
-Feature: Suggestion Type
+Feature: Read a Suggestion Type
+  As an API User
+  I can read a Suggestion Type for any given Box
 
   Scenario: Create a new Suggestion Box
     Given I create a "Box"

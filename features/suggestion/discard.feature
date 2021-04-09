@@ -1,8 +1,8 @@
 @update
-Feature: Suggestion update
-  Suggestions cannot be updated once they are submitted
-  As an API User
-  I can only discard a submitted Suggestion
+Feature: Discard a Suggestion
+  In order to remove any spurious Suggestion
+  As a Creator
+  I can discard any submitted Suggestion
 
   Scenario: Discard a Suggestion
     Given I create a "Box"
@@ -24,7 +24,6 @@ Feature: Suggestion update
     When I send a "PATCH" request to the "api_suggestions_patch_item" route with the route parameters and body:
       """
       {
-        "value": "changed",
         "discarded": true
       }
       """
@@ -57,7 +56,6 @@ Feature: Suggestion update
     When I send a "PATCH" request to the "api_suggestions_patch_item" route with the route parameters and body:
       """
       {
-        "value": "changed",
         "discarded": true
       }
       """

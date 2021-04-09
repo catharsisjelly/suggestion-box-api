@@ -34,7 +34,7 @@ class SuggestionType
      * @ORM\Column(type="ulid", unique=true)
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class=UlidGenerator::class)
-     * @ApiProperty(iri="http://schema.org/identity", identifier=true, writable=false)
+     * @ApiProperty(iri="https://schema.org/identifier", identifier=true, writable=false)
      */
     private Ulid $id;
 
@@ -46,7 +46,7 @@ class SuggestionType
 
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
-     * @ApiProperty(iri="http://schema.org/name", required=true)
+     * @ApiProperty(iri="https://schema.org/name", required=true)
      * @Assert\NotBlank()
      * @Assert\NotNull()
      */
@@ -54,7 +54,7 @@ class SuggestionType
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @ApiProperty(iri="http://schema.org/description")
+     * @ApiProperty(iri="https://schema.org/description")
      */
     private ?string $description;
 
