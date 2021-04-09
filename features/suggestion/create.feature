@@ -1,5 +1,7 @@
 @create
-Feature: Suggestions
+Feature: Create a Suggestion
+  As a Participant
+  I want to be able to add suggestions into a suggestion box given the suggestion type
 
   Scenario: Create a new Suggestion
     Given I create a "Box"

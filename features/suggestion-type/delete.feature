@@ -1,5 +1,8 @@
 @delete
-Feature: Suggestion Type
+Feature: Delete a Suggestion Type
+  In order to delete a Suggestion Type for a Box
+  As a Creator
+  I send a DELETE request
 
   Scenario: Delete a Suggestion Type
     Given I create a "Box"

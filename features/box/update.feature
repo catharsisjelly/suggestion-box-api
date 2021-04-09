@@ -1,5 +1,7 @@
 @update
 Feature: Update Suggestion Box
+  As a Creator
+  I can read update any Box to change the timebox, open state or name
 
   Background:
     Given I create a "Box"

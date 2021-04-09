@@ -1,6 +1,7 @@
 @create
 Feature: Create Suggestion Box
   In order to create a Box to hold Suggestions
+  As a Creator
   I must send a request with the correct body to create a Box
 
   Scenario: Create a new Suggestion Box

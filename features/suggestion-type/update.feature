@@ -1,5 +1,8 @@
 @update
-Feature: Suggestion
+Feature: Update a Suggestion Type
+  In order to update a Suggestion Type for a Box
+  As a Creator
+  I send a PATCH request with the relevant body
 
   Scenario: Update a Suggestion Type
     Given I create a "Box"
