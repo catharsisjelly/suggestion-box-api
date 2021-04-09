@@ -39,8 +39,8 @@ the supplied DB test container
 You can then run the following to set up your DB
 
 ```bash
-composer install
 docker-compose up -d
+docker-compose exec php sh -c "composer install"
 docker-compose exec php sh -c "bin/console doctrine:migrations:migrate -n"
 docker-compose exec php sh -c "bin/console doctrine:migrations:migrate -e test -n"
 ```
